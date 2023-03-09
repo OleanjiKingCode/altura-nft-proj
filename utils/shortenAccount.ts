@@ -10,3 +10,4 @@ const shortenAccount = (
 };
 
 export default shortenAccount;
+

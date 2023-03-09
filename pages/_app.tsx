@@ -3,7 +3,7 @@ import { chakra, ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 import { createClient, WagmiConfig } from "wagmi";
 import { connectors, provider } from "../config/wagmi";
-import { Navbar } from "../components/navbar";
+import { Navbar } from "../components/Nav/navbar";
 
 type CreateClientArgs = NonNullable<Parameters<typeof createClient>[number]>;
 type CreateClientConnectors = CreateClientArgs["connectors"];

@@ -19,7 +19,7 @@ import {
   RiFileCopyLine,
   RiUserFill,
 } from "react-icons/ri";
-import shortenAccount from "../utils/shortenAccount";
+import shortenAccount from "../../utils/shortenAccount";
 import { useAccount, useDisconnect } from "wagmi";
 import { FaChevronDown } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
@@ -77,7 +77,7 @@ const ProfileSubMenu = () => {
       <PopoverContent
         pt="5"
         pb="6"
-        bg="gray.50"
+        bg="white"
         color="black"
         w="355px"
         mr={{ md: "13", lg: "16" }}

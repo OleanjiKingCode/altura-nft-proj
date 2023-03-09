@@ -12,8 +12,8 @@ import {
 import { FocusableElement } from "@chakra-ui/utils";
 import { RiCloseLine } from "react-icons/ri";
 import { useConnect } from "wagmi";
-import { Metamask } from "./icons/metamask";
-import { WalletConnectIcon } from "./icons/walletconnect";
+import { Metamask } from "../icons/metamask";
+import { WalletConnectIcon } from "../icons/walletconnect";
 
 const WalletConnect = ({
   onClose,

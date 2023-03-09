@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { Box, chakra, Flex } from "@chakra-ui/react";
+import GetNfts from "@/components/GetNfts";
 
 export default function Home() {
   return (
@@ -12,11 +13,7 @@ export default function Home() {
       </Head>
       <chakra.div w="full">
         <Flex direction="column" mx="auto" w="full" bg="">
-          <Box>
-            <chakra.div pt={{ base: 6, lg: 14 }}>
-              {/* <HeroSection /> */}
-            </chakra.div>
-          </Box>
+          <GetNfts />
         </Flex>
       </chakra.div>
     </>

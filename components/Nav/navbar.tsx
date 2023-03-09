@@ -4,10 +4,6 @@ import {
   Spacer,
   Text,
   useDisclosure,
-  Image,
-  ListItem,
-  List,
-  Box,
   HStack,
   chakra,
   Icon,
@@ -58,26 +54,19 @@ export const Navbar = () => {
   };
 
   return (
-    <VStack>
+    <VStack bg="#1a202c" color="#4ed879">
       <Flex
         boxSize="full"
         align="center"
         gap="2.5"
-        py="17px"
+        py="15px"
         px={{ base: "4", lg: "10" }}
         fontSize="sm"
-        borderColor="gray.200"
+        borderColor="white"
         borderBottomWidth="1px"
       >
         <NextLink href="/" passHref>
           <Flex as="a" alignItems="center" gap="3" w="96" cursor="pointer">
-            {/* <Image
-              src="/logo.jpg"
-              w={{ base: "18%", md: "18%" }}
-              h={{ base: "18%", md: "18%" }}
-              alt="logo"
-            /> */}
-
             <Text fontWeight="bold" fontSize={{ base: "md", md: "2xl" }}>
               Altura NFT Project
             </Text>
@@ -94,7 +83,8 @@ export const Navbar = () => {
                 px="4"
                 fontWeight="medium"
                 bg="gray.800"
-                color="white"
+                borderColor="white"
+                borderWidth="1px"
                 _hover={{ bg: "#F0FFF4", color: "black" }}
               >
                 Connect Wallet
@@ -118,8 +108,7 @@ export const Navbar = () => {
       <Flex
         w="full"
         display={dropdown ? { base: "unset", lg: "none" } : "none"}
-        bg="blackAlpha.500"
-        opacity="0.9"
+        bg="white"
         py="5"
         fontSize="md"
         textAlign="center"
@@ -131,7 +120,6 @@ export const Navbar = () => {
             fontSize="sm"
             px="4"
             fontWeight="medium"
-            color="white"
             _hover={{ bg: "gray.100", color: "black" }}
           >
             Connect Wallet
