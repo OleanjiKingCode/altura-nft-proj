@@ -31,7 +31,6 @@ const GetNfts = () => {
     const baseURL = `https://eth-mainnet.g.alchemy.com/nft/v2/${apiKey}/getNFTs/`;
     const fetchURL = `${baseURL}?owner=${address}`;
     nfts = await fetch(fetchURL, requestOptions).then((data) => data.json());
-    console.log(nfts);
     if (nfts) {
       setAllNfts(nfts);
     }
@@ -117,7 +116,6 @@ const GetNfts = () => {
                       color="#4ed879"
                       onClick={() => {
                         setModalData(item);
-                        console.log(modalData);
                         onOpen();
                       }}
                     >

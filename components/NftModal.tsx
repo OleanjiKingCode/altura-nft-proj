@@ -25,7 +25,6 @@ export const NftModal = ({
   onClose: () => void;
   modalData: any;
 }) => {
-  console.log(modalData, modalData?.media);
   return (
     <Modal
       isOpen={isOpen}
