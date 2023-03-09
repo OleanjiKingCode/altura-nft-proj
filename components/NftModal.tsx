@@ -94,7 +94,7 @@ export const NftModal = ({
                 >
                   <Link
                     href={`https://opensea.io/collection/${slugifyText(
-                      modalData?.contractMetadata.openSea.collectionName
+                      modalData?.contractMetadata.openSea.collectionName ?? ""
                     )}`}
                     color="brandLinkColor"
                     target="_blank"
