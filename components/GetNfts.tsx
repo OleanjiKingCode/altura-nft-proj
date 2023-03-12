@@ -16,11 +16,22 @@ import { NftModal } from "./NftModal";
 
 const GetNfts = () => {
   const { isConnected: isUserConnected, address } = useAccount();
-  const [allNfts, setAllNfts] = useState<any>();
+  const [allNfts, setAllNfts] = useState<any[]>([]);
   const [modalData, setModalData] = useState<any>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const apiKey = "00xThk6gtxkPRD3sRgi7Z5mJlzyX_5zb";
+
+  const network_array = [
+    "eth-mainnet",
+    "eth-goerli",
+    "polygon-mainnet",
+    "polygon-mumbai",
+    "arb-mainnet",
+    "arb-goerli",
+    "opt-mainnet",
+    "opt-goerli",
+  ];
 
   const getNftData = async () => {
     let nfts;
@@ -28,18 +39,24 @@ const GetNfts = () => {
       method: "GET",
     };
 
-    const baseURL = `https://eth-mainnet.g.alchemy.com/nft/v2/${apiKey}/getNFTs/`;
-    const fetchURL = `${baseURL}?owner=${address}`;
-    nfts = await fetch(fetchURL, requestOptions).then((data) => data.json());
-    if (nfts) {
-      setAllNfts(nfts);
-    }
+    let allArray: any[] = [];
+    network_array.map(async (network) => {
+      const baseURL = `https://${network}.g.alchemy.com/nft/v2/${apiKey}/getNFTs/`;
+      const fetchURL = `${baseURL}?owner=${address}`;
+      nfts = await fetch(fetchURL, requestOptions).then((data) => data.json());
+      if (nfts) {
+        allArray = [...allArray, { [network]: nfts }];
+      }
+      console.log(network, nfts, allArray, allArray[0].{"eth-mainnet"});
+    });
+
+    setAllNfts(allArray);
   };
 
   useEffect(() => {
     getNftData();
   }, [isUserConnected, address]);
-
+  console.log(allNfts);
   return (
     <Box minH="90vh" bg="#1a202c">
       <>
@@ -64,7 +81,7 @@ const GetNfts = () => {
             px="4"
             spacing="20px"
           >
-            {allNfts?.ownedNfts.map((item: any, i: number) => (
+            {/* {allNfts?.map((item: any, i: number) => (
               <Box
                 key={i}
                 pb="4"
@@ -124,7 +141,7 @@ const GetNfts = () => {
                   </Flex>
                 </Box>
               </Box>
-            ))}
+            ))} */}
           </SimpleGrid>
         )}
       </>
