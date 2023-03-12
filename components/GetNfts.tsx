@@ -16,21 +16,21 @@ import { NftModal } from "./NftModal";
 
 const GetNfts = () => {
   const { isConnected: isUserConnected, address } = useAccount();
-  const [allNfts, setAllNfts] = useState<any[]>([]);
+  const [allNfts, setAllNfts] = useState<any>({});
   const [modalData, setModalData] = useState<any>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const apiKey = "00xThk6gtxkPRD3sRgi7Z5mJlzyX_5zb";
 
   const network_array = [
-    "eth-mainnet",
-    "eth-goerli",
-    "polygon-mainnet",
-    "polygon-mumbai",
-    "arb-mainnet",
-    "arb-goerli",
-    "opt-mainnet",
-    "opt-goerli",
+    { id: "eth-mainnet", name: "ETHMAIN" },
+    { id: "eth-goerli", name: "ETHTEST" },
+    { id: "polygon-mainnet", name: "POLYMAIN" },
+    { id: "polygon-mumbai", name: "POLYTEST" },
+    { id: "arb-mainnet", name: "ARBMAIN" },
+    { id: "arb-goerli", name: "ARBTEST" },
+    { id: "opt-mainnet", name: "OPTMAIN" },
+    { id: "opt-goerli", name: "OPTTEST" },
   ];
 
   const getNftData = async () => {
@@ -39,18 +39,17 @@ const GetNfts = () => {
       method: "GET",
     };
 
-    let allArray: any[] = [];
+    let allArray: any = {};
     network_array.map(async (network) => {
-      const baseURL = `https://${network}.g.alchemy.com/nft/v2/${apiKey}/getNFTs/`;
+      const baseURL = `https://${network.id}.g.alchemy.com/nft/v2/${apiKey}/getNFTs/`;
       const fetchURL = `${baseURL}?owner=${address}`;
       nfts = await fetch(fetchURL, requestOptions).then((data) => data.json());
       if (nfts) {
-        allArray = [...allArray, { [network]: nfts }];
+        allArray = { ...allArray, [network.name]: nfts };
       }
-      console.log(network, nfts, allArray, allArray[0].{"eth-mainnet"});
+      console.log(allArray["POLYMAIN"]?.ownedNfts, allArray);
+      setAllNfts(allArray);
     });
-
-    setAllNfts(allArray);
   };
 
   useEffect(() => {
@@ -81,67 +80,69 @@ const GetNfts = () => {
             px="4"
             spacing="20px"
           >
-            {/* {allNfts?.map((item: any, i: number) => (
-              <Box
-                key={i}
-                pb="4"
-                bg="#4ed879"
-                rounded="2xl"
-                mb="10"
-                cursor="pointer"
-              >
-                <chakra.div
-                  roundedTop="2xl"
-                  overflow="hidden"
-                  maxH="240px"
-                  mb="5"
+            {allNfts["POLYMAIN"]?.ownedNfts.map((item: any, i: number) => {
+              return (
+                <Box
+                  key={i}
+                  pb="4"
+                  bg="#4ed879"
+                  rounded="2xl"
+                  mb="10"
+                  cursor="pointer"
                 >
-                  <img src={item.media[0].gateway} />
-                </chakra.div>
-
-                <Flex direction="column" gap="3" minH="40px" px="5">
-                  <Flex alignItems="start" justifyContent="space-between">
-                    <Heading
-                      fontSize={
-                        item.contractMetadata.name.length > 17
-                          ? { sm: "18", md: "28" }
-                          : { sm: "15", md: "18" }
-                      }
-                      color="white"
-                      minH="30px"
-                    >
-                      {item.contractMetadata.name}
-                    </Heading>
-                    <Tag size="sm" fontSize="lg" color="gray" bg="#4ed8c4">
-                      {item.title}
-                    </Tag>
-                  </Flex>
-
-                  <Text fontWeight="medium" color="white">
-                    {shortenText(item.description)}
-                  </Text>
-                </Flex>
-                <Box position="relative" bottom="-3" w="full" pb="1" px="5">
-                  <Flex
-                    gap="3"
-                    alignItems="center"
-                    justifyContent="space-between"
+                  <chakra.div
+                    roundedTop="2xl"
+                    overflow="hidden"
+                    maxH="240px"
+                    mb="5"
                   >
-                    <Button
-                      w="full"
-                      fontWeight="500"
-                      color="#4ed879"
-                      onClick={() => {
-                        setModalData(item);
-                        onOpen();
-                      }}
-                    >
-                      More
-                    </Button>
+                    <img src={item.media[0].gateway} />
+                  </chakra.div>
+
+                  <Flex direction="column" gap="3" minH="40px" px="5">
+                    <Flex alignItems="start" justifyContent="space-between">
+                      <Heading
+                        fontSize={
+                          item.contractMetadata.name?.length > 17
+                            ? { sm: "18", md: "28" }
+                            : { sm: "15", md: "18" }
+                        }
+                        color="white"
+                        minH="30px"
+                      >
+                        {item.contractMetadata.name}
+                      </Heading>
+                      <Tag size="sm" fontSize="lg" color="gray" bg="#4ed8c4">
+                        {item.title}
+                      </Tag>
+                    </Flex>
+
+                    <Text fontWeight="medium" color="white">
+                      {shortenText(item.description)}
+                    </Text>
                   </Flex>
+                  <Box position="relative" bottom="-3" w="full" pb="1" px="5">
+                    <Flex
+                      gap="3"
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <Button
+                        w="full"
+                        fontWeight="500"
+                        color="#4ed879"
+                        onClick={() => {
+                          setModalData(item);
+                          onOpen();
+                        }}
+                      >
+                        More
+                      </Button>
+                    </Flex>
+                  </Box>
                 </Box>
-              </Box>
-            ))} */}
+              );
+            })}
           </SimpleGrid>
         )}
       </>
