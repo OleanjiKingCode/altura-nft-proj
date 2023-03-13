@@ -14,6 +14,17 @@ import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { NftModal } from "./NftModal";
 
+export const network_array = [
+  { id: "eth-mainnet", name: "ETHMAIN" },
+  { id: "eth-goerli", name: "ETHTEST" },
+  { id: "polygon-mainnet", name: "POLYMAIN" },
+  { id: "polygon-mumbai", name: "POLYTEST" },
+  { id: "arb-mainnet", name: "ARBMAIN" },
+  { id: "arb-goerli", name: "ARBTEST" },
+  { id: "opt-mainnet", name: "OPTMAIN" },
+  { id: "opt-goerli", name: "OPTTEST" },
+];
+
 const GetNfts = () => {
   const { isConnected: isUserConnected, address } = useAccount();
   const [allNfts, setAllNfts] = useState<any>({});
@@ -21,17 +32,6 @@ const GetNfts = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const apiKey = "00xThk6gtxkPRD3sRgi7Z5mJlzyX_5zb";
-
-  const network_array = [
-    { id: "eth-mainnet", name: "ETHMAIN" },
-    { id: "eth-goerli", name: "ETHTEST" },
-    { id: "polygon-mainnet", name: "POLYMAIN" },
-    { id: "polygon-mumbai", name: "POLYTEST" },
-    { id: "arb-mainnet", name: "ARBMAIN" },
-    { id: "arb-goerli", name: "ARBTEST" },
-    { id: "opt-mainnet", name: "OPTMAIN" },
-    { id: "opt-goerli", name: "OPTTEST" },
-  ];
 
   const getNftData = async () => {
     let nfts;
@@ -48,12 +48,32 @@ const GetNfts = () => {
         allArray = { ...allArray, [network.name]: nfts };
       }
       console.log(allArray["POLYMAIN"]?.ownedNfts, allArray);
+      console.log(allArray);
       setAllNfts(allArray);
     });
   };
 
+  const filterNftData = async () => {
+    await getNftData();
+    let arr: any = allNfts;
+    console.log(arr, "ckkmskmsdvkm");
+    let newArray: any = {};
+    network_array.map((network) => {
+      console.log(arr[network.name]);
+      if (arr[network.name]?.ownedNfts.length > 0) {
+        console.log("fvmkmk");
+        arr[network.name]?.ownedNfts.map((item: any) => {
+          if (item.title !== "") {
+            newArray = { ...newArray, newArray };
+          }
+        });
+      }
+      setAllNfts(newArray);
+    });
+  };
+
   useEffect(() => {
-    getNftData();
+    filterNftData();
   }, [isUserConnected, address]);
   console.log(allNfts);
   return (
