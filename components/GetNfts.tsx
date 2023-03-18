@@ -28,6 +28,7 @@ export const network_array = [
 const GetNfts = () => {
   const { isConnected: isUserConnected, address } = useAccount();
   const [allNfts, setAllNfts] = useState<any>({});
+  const [allFormattedNfts, setAllFormattedNfts] = useState<any>({});
   const [modalData, setModalData] = useState<any>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -47,35 +48,41 @@ const GetNfts = () => {
       if (nfts) {
         allArray = { ...allArray, [network.name]: nfts };
       }
-      console.log(allArray["POLYMAIN"]?.ownedNfts, allArray);
+      // console.log(allArray["POLYMAIN"]?.ownedNfts, allArray);
       console.log(allArray);
       setAllNfts(allArray);
+
+      // return allArray;
     });
+    console.log(allArray);
   };
 
-  const filterNftData = async () => {
-    await getNftData();
-    let arr: any = allNfts;
-    console.log(arr, "ckkmskmsdvkm");
+  const filterNftData = async (allArray: any) => {
+    let arr: any = allArray;
     let newArray: any = {};
+
     network_array.map((network) => {
-      console.log(arr[network.name]);
       if (arr[network.name]?.ownedNfts.length > 0) {
-        console.log("fvmkmk");
-        arr[network.name]?.ownedNfts.map((item: any) => {
-          if (item.title !== "") {
-            newArray = { ...newArray, newArray };
+        arr[network.name]?.ownedNfts.map((item: any, i: number) => {
+          if (item.title === "" || item.description === "") {
+            console.log(item.title);
+            arr[network.name]?.ownedNfts.splice(i, 1);
+
+            // const newData = arr[network.name];
+            // console.log(newArray, newData);
+            // newArray = { ...newArray, [network.name]: newData };
           }
         });
       }
-      setAllNfts(newArray);
+      setAllFormattedNfts(arr);
     });
   };
 
   useEffect(() => {
-    filterNftData();
+    getNftData();
+    filterNftData(allNfts);
   }, [isUserConnected, address]);
-  console.log(allNfts);
+  console.log(allFormattedNfts);
   return (
     <Box minH="90vh" bg="#1a202c">
       <>
@@ -100,69 +107,71 @@ const GetNfts = () => {
             px="4"
             spacing="20px"
           >
-            {allNfts["POLYMAIN"]?.ownedNfts.map((item: any, i: number) => {
-              return (
-                <Box
-                  key={i}
-                  pb="4"
-                  bg="#4ed879"
-                  rounded="2xl"
-                  mb="10"
-                  cursor="pointer"
-                >
-                  <chakra.div
-                    roundedTop="2xl"
-                    overflow="hidden"
-                    maxH="240px"
-                    mb="5"
+            {allFormattedNfts["POLYMAIN"]?.ownedNfts.map(
+              (item: any, i: number) => {
+                return (
+                  <Box
+                    key={i}
+                    pb="4"
+                    bg="#4ed879"
+                    rounded="2xl"
+                    mb="10"
+                    cursor="pointer"
                   >
-                    <img src={item.media[0].gateway} />
-                  </chakra.div>
-
-                  <Flex direction="column" gap="3" minH="40px" px="5">
-                    <Flex alignItems="start" justifyContent="space-between">
-                      <Heading
-                        fontSize={
-                          item.contractMetadata.name?.length > 17
-                            ? { sm: "18", md: "28" }
-                            : { sm: "15", md: "18" }
-                        }
-                        color="white"
-                        minH="30px"
-                      >
-                        {item.contractMetadata.name}
-                      </Heading>
-                      <Tag size="sm" fontSize="lg" color="gray" bg="#4ed8c4">
-                        {item.title}
-                      </Tag>
-                    </Flex>
-
-                    <Text fontWeight="medium" color="white">
-                      {shortenText(item.description)}
-                    </Text>
-                  </Flex>
-                  <Box position="relative" bottom="-3" w="full" pb="1" px="5">
-                    <Flex
-                      gap="3"
-                      alignItems="center"
-                      justifyContent="space-between"
+                    <chakra.div
+                      roundedTop="2xl"
+                      overflow="hidden"
+                      maxH="240px"
+                      mb="5"
                     >
-                      <Button
-                        w="full"
-                        fontWeight="500"
-                        color="#4ed879"
-                        onClick={() => {
-                          setModalData(item);
-                          onOpen();
-                        }}
-                      >
-                        More
-                      </Button>
+                      <img src={item.media[0].gateway} />
+                    </chakra.div>
+
+                    <Flex direction="column" gap="3" minH="40px" px="5">
+                      <Flex alignItems="start" justifyContent="space-between">
+                        <Heading
+                          fontSize={
+                            item.contractMetadata.name?.length > 17
+                              ? { sm: "18", md: "28" }
+                              : { sm: "15", md: "18" }
+                          }
+                          color="white"
+                          minH="30px"
+                        >
+                          {item.contractMetadata.name}
+                        </Heading>
+                        <Tag size="sm" fontSize="lg" color="gray" bg="#4ed8c4">
+                          {item.title}
+                        </Tag>
+                      </Flex>
+
+                      <Text fontWeight="medium" color="white">
+                        {shortenText(item.description)}
+                      </Text>
                     </Flex>
+                    <Box position="relative" bottom="-3" w="full" pb="1" px="5">
+                      <Flex
+                        gap="3"
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Button
+                          w="full"
+                          fontWeight="500"
+                          color="#4ed879"
+                          onClick={() => {
+                            setModalData(item);
+                            onOpen();
+                          }}
+                        >
+                          More
+                        </Button>
+                      </Flex>
+                    </Box>
                   </Box>
-                </Box>
-              );
-            })}
+                );
+              }
+            )}
           </SimpleGrid>
         )}
       </>
