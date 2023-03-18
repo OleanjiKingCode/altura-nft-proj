@@ -8,6 +8,7 @@ import {
   Heading,
   useDisclosure,
   Tag,
+  Image,
   SimpleGrid,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
@@ -75,7 +76,7 @@ const GetNfts = () => {
     getNftData();
     filterNftData(allNfts);
   }, [isUserConnected, address]);
-
+  console.log(allFormattedNfts);
   return (
     <Box minH="90vh" bg="#1a202c">
       <>
@@ -110,6 +111,7 @@ const GetNfts = () => {
                     rounded="2xl"
                     mb="10"
                     cursor="pointer"
+                    minH="446px"
                   >
                     <chakra.div
                       roundedTop="2xl"
@@ -117,16 +119,16 @@ const GetNfts = () => {
                       maxH="240px"
                       mb="5"
                     >
-                      <img src={item.media[0].gateway} />
+                      <Image src={item.media[0].gateway} minH="240px" />
                     </chakra.div>
 
                     <Flex direction="column" gap="3" minH="40px" px="5">
-                      <Flex alignItems="start" justifyContent="space-between">
+                      <Flex alignItems="center" justifyContent="space-between">
                         <Heading
                           fontSize={
                             item.contractMetadata.name?.length > 17
-                              ? { sm: "18", md: "28" }
-                              : { sm: "15", md: "18" }
+                              ? { sm: "15", md: "18" }
+                              : { sm: "18", md: "28" }
                           }
                           color="white"
                           minH="30px"
