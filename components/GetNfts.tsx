@@ -39,7 +39,6 @@ const GetNfts = () => {
     var requestOptions = {
       method: "GET",
     };
-
     let allArray: any = {};
     network_array.map(async (network) => {
       const baseURL = `https://${network.id}.g.alchemy.com/nft/v2/${apiKey}/getNFTs/`;
@@ -48,11 +47,7 @@ const GetNfts = () => {
       if (nfts) {
         allArray = { ...allArray, [network.name]: nfts };
       }
-      // console.log(allArray["POLYMAIN"]?.ownedNfts, allArray);
-      console.log(allArray);
       setAllNfts(allArray);
-
-      // return allArray;
     });
     console.log(allArray);
   };
@@ -60,29 +55,27 @@ const GetNfts = () => {
   const filterNftData = async (allArray: any) => {
     let arr: any = allArray;
     let newArray: any = {};
-
+    let dd: any = [];
     network_array.map((network) => {
       if (arr[network.name]?.ownedNfts.length > 0) {
         arr[network.name]?.ownedNfts.map((item: any, i: number) => {
-          if (item.title === "" || item.description === "") {
-            console.log(item.title);
-            arr[network.name]?.ownedNfts.splice(i, 1);
-
-            // const newData = arr[network.name];
-            // console.log(newArray, newData);
-            // newArray = { ...newArray, [network.name]: newData };
+          if (item.title !== "" || item.description !== "") {
+            dd.push(item);
           }
         });
       }
-      setAllFormattedNfts(arr);
+      arr[network.name].ownedNfts = dd;
+      newArray = { ...newArray, [network.name]: arr[network.name] };
+      dd = [];
     });
+    setAllFormattedNfts(arr);
   };
 
   useEffect(() => {
     getNftData();
     filterNftData(allNfts);
   }, [isUserConnected, address]);
-  console.log(allFormattedNfts);
+
   return (
     <Box minH="90vh" bg="#1a202c">
       <>
