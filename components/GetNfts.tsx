@@ -10,6 +10,7 @@ import {
   Tag,
   Image,
   SimpleGrid,
+  Select,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
@@ -76,7 +77,7 @@ const GetNfts = () => {
     getNftData();
     filterNftData(allNfts);
   }, [isUserConnected, address]);
-  console.log(allFormattedNfts);
+
   return (
     <Box minH="90vh" bg="#1a202c">
       <>
@@ -95,79 +96,125 @@ const GetNfts = () => {
             </Text>
           </Flex>
         ) : (
-          <SimpleGrid
-            columns={{ sm: 1, md: 2, lg: 3 }}
-            py="10"
-            px="4"
-            spacing="20px"
-          >
-            {allFormattedNfts["POLYMAIN"]?.ownedNfts.map(
-              (item: any, i: number) => {
-                return (
-                  <Box
-                    key={i}
-                    pb="4"
-                    bg="#4ed879"
-                    rounded="2xl"
-                    mb="10"
-                    cursor="pointer"
-                    minH="446px"
-                  >
-                    <chakra.div
-                      roundedTop="2xl"
-                      overflow="hidden"
-                      maxH="240px"
-                      mb="5"
+          <Flex direction="column">
+            <Select placeholder="Select option">
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </Select>
+            <SimpleGrid
+              columns={{ sm: 1, md: 2, lg: 3 }}
+              py="10"
+              px="4"
+              spacing="20px"
+            >
+              {allFormattedNfts["POLYMAIN"]?.ownedNfts.map(
+                (item: any, i: number) => {
+                  return (
+                    <Flex
+                      key={i}
+                      pb="4"
+                      bg="#4ed879"
+                      rounded="2xl"
+                      mb="10"
+                      cursor="pointer"
+                      minH="446px"
+                      direction="column"
+                      alignItems="center"
                     >
-                      <Image src={item.media[0].gateway} minH="240px" />
-                    </chakra.div>
-
-                    <Flex direction="column" gap="3" minH="40px" px="5">
-                      <Flex alignItems="center" justifyContent="space-between">
-                        <Heading
-                          fontSize={
-                            item.contractMetadata.name?.length > 17
-                              ? { sm: "15", md: "18" }
-                              : { sm: "18", md: "28" }
-                          }
-                          color="white"
-                          minH="30px"
-                        >
-                          {item.contractMetadata.name}
-                        </Heading>
-                        <Tag size="sm" fontSize="lg" color="gray" bg="#4ed8c4">
-                          {item.title}
-                        </Tag>
-                      </Flex>
-
-                      <Text fontWeight="medium" color="white">
-                        {shortenText(item.description)}
-                      </Text>
-                    </Flex>
-                    <Box position="relative" bottom="-3" w="full" pb="1" px="5">
-                      <Flex
-                        gap="3"
+                      <chakra.div
+                        roundedTop="2xl"
+                        overflow="hidden"
+                        maxH="240px"
+                        mb="5"
                         alignItems="center"
-                        justifyContent="space-between"
+                        justifyContent="center"
                       >
-                        <Button
-                          w="full"
-                          fontWeight="500"
-                          color="#4ed879"
-                          onClick={() => {
-                            setModalData(item);
-                            onOpen();
-                          }}
-                        >
-                          More
-                        </Button>
+                        <Image src={item.media[0].gateway} minH="240px" />
+                      </chakra.div>
+
+                      <Flex direction="column" gap="3" minH="40px" px="5">
+                        {item.contractMetadata.name ? (
+                          <Flex
+                            alignItems="center"
+                            justifyContent="space-between"
+                            h="50"
+                          >
+                            <Heading
+                              fontSize={
+                                item.contractMetadata.name?.length > 17
+                                  ? { sm: "15", md: "18" }
+                                  : { sm: "18", md: "28" }
+                              }
+                              color="white"
+                              minH="30px"
+                            >
+                              {item.contractMetadata.name}
+                            </Heading>
+                            <Tag
+                              size="sm"
+                              fontSize="lg"
+                              color="gray"
+                              bg="#4ed8c4"
+                            >
+                              {shortenText(item.title, 12)}
+                            </Tag>
+                          </Flex>
+                        ) : (
+                          <Flex
+                            alignItems="center"
+                            justifyContent="space-between"
+                            h="50"
+                          >
+                            <Heading
+                              fontSize={
+                                item.title?.length > 17
+                                  ? { sm: "15", md: "18" }
+                                  : { sm: "18", md: "28" }
+                              }
+                              color="white"
+                              minH="30px"
+                            >
+                              {item.title}
+                            </Heading>
+                          </Flex>
+                        )}
+
+                        <Text fontWeight="medium" color="white">
+                          {shortenText(item.description, 90)}
+                        </Text>
                       </Flex>
-                    </Box>
-                  </Box>
-                );
-              }
-            )}
-          </SimpleGrid>
+                      <Box
+                        position="relative"
+                        bottom="-3"
+                        w="full"
+                        pb="1"
+                        px="5"
+                      >
+                        <Flex
+                          gap="3"
+                          alignItems="center"
+                          justifyContent="space-between"
+                        >
+                          <Button
+                            w="full"
+                            fontWeight="500"
+                            color="#4ed879"
+                            onClick={() => {
+                              setModalData(item);
+                              onOpen();
+                            }}
+                          >
+                            More
+                          </Button>
+                        </Flex>
+                      </Box>
+                    </Flex>
+                  );
+                }
+              )}
+            </SimpleGrid>
+          </Flex>
         )}
       </>
       <NftModal isOpen={isOpen} onClose={onClose} modalData={modalData} />

@@ -64,7 +64,7 @@ export const NftModal = ({
               </Box>
               <Box>
                 <chakra.span fontWeight="700">Description: </chakra.span>
-                <chakra.span>{shortenText(modalData?.description)}</chakra.span>
+                <chakra.span>{shortenText(modalData?.description,90)}</chakra.span>
               </Box>
               <Box>
                 <chakra.span fontWeight="700">Number Owned: </chakra.span>
