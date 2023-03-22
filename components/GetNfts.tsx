@@ -66,16 +66,20 @@ const GetNfts = () => {
           }
         });
       }
-      arr[network.name].ownedNfts = dd;
-      newArray = { ...newArray, [network.name]: arr[network.name] };
+      console.log(dd);
+      newArray = { ...newArray, [network.name]: dd };
       dd = [];
+      console.log(newArray);
     });
-    setAllFormattedNfts(arr);
+    setAllFormattedNfts(newArray);
   };
 
+  const dataFetching = async () => {
+    await getNftData();
+    await filterNftData(allNfts);
+  };
   useEffect(() => {
-    getNftData();
-    filterNftData(allNfts);
+    dataFetching();
   }, [isUserConnected, address]);
 
   return (
@@ -108,111 +112,104 @@ const GetNfts = () => {
               px="4"
               spacing="20px"
             >
-              {allFormattedNfts["POLYMAIN"]?.ownedNfts.map(
-                (item: any, i: number) => {
-                  return (
-                    <Flex
-                      key={i}
-                      pb="4"
-                      bg="#4ed879"
-                      rounded="2xl"
-                      mb="10"
-                      cursor="pointer"
-                      minH="446px"
-                      direction="column"
+              {allFormattedNfts["POLYMAIN"]?.map((item: any, i: number) => {
+                return (
+                  <Flex
+                    key={i}
+                    pb="4"
+                    bg="#4ed879"
+                    rounded="2xl"
+                    mb="10"
+                    cursor="pointer"
+                    minH="446px"
+                    direction="column"
+                    alignItems="center"
+                  >
+                    <chakra.div
+                      roundedTop="2xl"
+                      overflow="hidden"
+                      maxH="240px"
+                      mb="5"
                       alignItems="center"
+                      justifyContent="center"
                     >
-                      <chakra.div
-                        roundedTop="2xl"
-                        overflow="hidden"
-                        maxH="240px"
-                        mb="5"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        <Image src={item.media[0].gateway} minH="240px" />
-                      </chakra.div>
+                      <Image src={item.media[0].gateway} minH="240px" />
+                    </chakra.div>
 
-                      <Flex direction="column" gap="3" minH="40px" px="5">
-                        {item.contractMetadata.name ? (
-                          <Flex
-                            alignItems="center"
-                            justifyContent="space-between"
-                            h="50"
-                          >
-                            <Heading
-                              fontSize={
-                                item.contractMetadata.name?.length > 17
-                                  ? { sm: "15", md: "18" }
-                                  : { sm: "18", md: "28" }
-                              }
-                              color="white"
-                              minH="30px"
-                            >
-                              {item.contractMetadata.name}
-                            </Heading>
-                            <Tag
-                              size="sm"
-                              fontSize="lg"
-                              color="gray"
-                              bg="#4ed8c4"
-                            >
-                              {shortenText(item.title, 12)}
-                            </Tag>
-                          </Flex>
-                        ) : (
-                          <Flex
-                            alignItems="center"
-                            justifyContent="space-between"
-                            h="50"
-                          >
-                            <Heading
-                              fontSize={
-                                item.title?.length > 17
-                                  ? { sm: "15", md: "18" }
-                                  : { sm: "18", md: "28" }
-                              }
-                              color="white"
-                              minH="30px"
-                            >
-                              {item.title}
-                            </Heading>
-                          </Flex>
-                        )}
-
-                        <Text fontWeight="medium" color="white">
-                          {shortenText(item.description, 90)}
-                        </Text>
-                      </Flex>
-                      <Box
-                        position="relative"
-                        bottom="-3"
-                        w="full"
-                        pb="1"
-                        px="5"
-                      >
+                    <Flex direction="column" gap="3" minH="40px" px="5">
+                      {item.contractMetadata.name ? (
                         <Flex
-                          gap="3"
                           alignItems="center"
                           justifyContent="space-between"
+                          h="50"
                         >
-                          <Button
-                            w="full"
-                            fontWeight="500"
-                            color="#4ed879"
-                            onClick={() => {
-                              setModalData(item);
-                              onOpen();
-                            }}
+                          <Heading
+                            fontSize={
+                              item.contractMetadata.name?.length > 17
+                                ? { sm: "15", md: "18" }
+                                : { sm: "18", md: "28" }
+                            }
+                            color="white"
+                            minH="30px"
                           >
-                            More
-                          </Button>
+                            {item.contractMetadata.name}
+                          </Heading>
+                          <Tag
+                            size="sm"
+                            fontSize="lg"
+                            color="gray"
+                            bg="#4ed8c4"
+                          >
+                            {shortenText(item.title, 12)}
+                          </Tag>
                         </Flex>
-                      </Box>
+                      ) : (
+                        <Flex
+                          alignItems="center"
+                          justifyContent="space-between"
+                          h="50"
+                        >
+                          <Heading
+                            fontSize={
+                              item.title?.length > 17
+                                ? { sm: "15", md: "18" }
+                                : { sm: "18", md: "28" }
+                            }
+                            color="white"
+                            minH="30px"
+                          >
+                            {item.title}
+                          </Heading>
+                        </Flex>
+                      )}
+
+                      <Text fontWeight="medium" color="white">
+                        {shortenText(item.description, 90)}
+                      </Text>
                     </Flex>
-                  );
-                }
-              )}
+                    <Box position="relative" bottom="-3" w="full" pb="1" px="5">
+                      <Flex
+                        gap="3"
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Button
+                          w="full"
+                          fontWeight="500"
+                          bg="white"
+                          color="gray.400"
+                          onClick={() => {
+                            setModalData(item);
+                            onOpen();
+                          }}
+                        >
+                          More
+                        </Button>
+                      </Flex>
+                    </Box>
+                  </Flex>
+                );
+              })}
             </SimpleGrid>
           </Flex>
         )}
